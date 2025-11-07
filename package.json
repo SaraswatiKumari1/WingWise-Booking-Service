@@ -1,0 +1,17 @@
+{
+  "name": "flight_booking_system",
+  "version": "1.0.0",
+  "description": "A basic backend for flight booking system",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --watch src/index.js"
+
+  },
+  "author": "Saraswati",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "http-status-codes": "^2.3.0"
+  }
+}
