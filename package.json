@@ -1,5 +1,5 @@
 {
-  "name": "flight_booking_system",
+  "name": "wingwise_booking_service",
   "version": "1.0.0",
   "description": "A basic backend for flight booking system",
   "main": "index.js",
