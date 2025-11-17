@@ -5,5 +5,6 @@ dotenv.config(); //config will read your .env file, parse the contents, assign i
 //dotenv->Object, and dotenv.config() returns an object with parsed variables.It also adds those variables to process.env
 console.log("Port",process.env.PORT); //process is a global object in Node.js that provides information about, and control over, the current Node.js process. process.env is an object that contains the user environment.
 module.exports = {
-    PORT: process.env.PORT
+    PORT: process.env.PORT,
+    WINGWISE_FLIGHT_SERVICE: process.env.WINGWISE_FLIGHT_SERVICE
 }
