@@ -46,11 +46,14 @@ async function makePayment(data) {
         if(bookingDetails.status == CANCELLED){
             throw new AppError("Booking is cancelled ", StatusCodes.BAD_REQUEST);
         }
-        //console.log("Booking Details: ", bookingDetails);
+        console.log("Booking Details: ", bookingDetails);
         const bookingTime = new Date(bookingDetails.createdAt);
         const currentTime = new Date();
         if(currentTime - bookingTime > 300000){
-            bookingRepository.update(data.bookingId, {status:CANCELLED}, transaction);
+            // bookingRepository.update(data.bookingId, {status:CANCELLED}, transaction);
+            console.log("Hi1");
+            await cancelBooking(data.bookingId);
+            console.log("Hi2");
             throw new AppError("Booking time expired ", StatusCodes.BAD_REQUEST);
         }
         //console.log("dt: ",dt);
@@ -71,6 +74,31 @@ async function makePayment(data) {
         await transaction.rollback();
         throw error;
     }
+}
+
+async function cancelBooking(bookingId){
+    const transaction = await db.sequelize.transaction();
+    try{
+        const bookingDetails = await bookingRepository.get(bookingId, transaction);
+        if(bookingDetails.status == CANCELLED){
+            console.log("Hi6");
+            await transaction.commit();
+            return true;
+        }
+
+        await axios.patch(`${ServerConfig.WINGWISE_FLIGHT_SERVICE}/api/v1/flights/${bookingDetails.flightId}/seats`, {
+            seats: bookingDetails.noOfSeats,
+            dec: 0
+        });
+
+        bookingRepository.update(bookingId, {status:CANCELLED}, transaction);
+
+        await transaction.commit();
+
+    } catch(error) {
+        await transaction.rollback();
+        throw error;
+    } 
 }
 
 
